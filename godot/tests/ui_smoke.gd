@@ -8,9 +8,10 @@ extends SceneTree
 ## の3つだけを見る。見た目の正しさは人間が確認する。
 ##
 ## **注意**: `--script` 実行では、オートロード（Game / Platform / Balance）は
-## スクリプトのコンパイル後に登録されるため、識別子として直接書くと
-## 「Identifier not found」でコンパイルに失敗する。
-## テストからは必ず /root/... の実行時参照で取ること。
+## このスクリプトのコンパイルより後、さらに `_initialize()` より後に登録される。
+##   - 識別子として直接書く  → 「Identifier not found」でコンパイルに失敗
+##   - _initialize ですぐ取る → root がまだツリーに入っておらず get_node が失敗
+## したがって「1フレーム待ってから、root からの相対パスで取る」必要がある。
 
 const SCENES := [
 	"res://ui/main.tscn",
@@ -23,6 +24,17 @@ const SCREENS := [
 ]
 
 const FRAMES := 20
+
+
+## オートロードが root に入るまで数フレーム待って取る。
+## 絶対パスは root がツリーに入るまで使えないので、root からの相対で引く。
+func _autoload(node_name: String) -> Node:
+	for i in range(30):
+		var found := root.get_node_or_null(NodePath(node_name))
+		if found != null:
+			return found
+		await process_frame
+	return null
 
 
 func _initialize() -> void:
@@ -43,7 +55,7 @@ func _initialize() -> void:
 		node.free()
 
 	# 画面はセッションが走っていないと組めない。実機と同じ順序で起動する
-	var game := root.get_node_or_null(^"/root/Game")
+	var game := await _autoload("Game")
 	if game == null:
 		push_error("オートロード Game が見つからない")
 		quit(2)
