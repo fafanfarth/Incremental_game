@@ -88,10 +88,6 @@ class CellBlockCore(StageCore):
         dark = (sim.t % lo["period_sec"]) >= (lo["period_sec"] - lo["duration_sec"])
         return (not dark) or sim.has("tap_during_lights_out")
 
-    @property
-    def _dark_key(self):
-        return "lights_out"
-
     def _dark(self, sim) -> bool:
         lo = sim.d["lights_out"]
         return (sim.t % lo["period_sec"]) >= (lo["period_sec"] - lo["duration_sec"])

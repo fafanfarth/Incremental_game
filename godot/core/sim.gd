@@ -34,11 +34,11 @@ var _skills: Dictionary = {}        # スキルID -> 定義
 var _log: Array[String] = []
 
 
-func _init(p_profile: SimProfile, p_data: Dictionary, p_core: StageCore, seed: int = 1) -> void:
+func _init(p_profile: SimProfile, p_data: Dictionary, p_core: StageCore, p_seed: int = 1) -> void:
 	profile = p_profile
 	data = p_data
 	core = p_core
-	rng.seed = seed
+	rng.seed = p_seed
 	for sk in data["skills"]:
 		_skills[sk["id"]] = sk
 	if data.has("inspection"):

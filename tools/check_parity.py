@@ -20,16 +20,23 @@ sys.path.insert(0, str(ROOT / "prototype"))
 from cores import CORES  # noqa: E402
 from sim import Profile, Sim, load  # noqa: E402
 
-# GDScript に移植済みのステージだけを対象にする。
-# 移植したらここに足す（godot/tests/parity.gd の CORES も同時に）
-PORTED = ["stage01"]
+# GDScript に移植済みのステージ。godot/tests/parity.gd の CORES と一致させる
+PORTED = ["stage01", "stage02", "stage03", "stage04", "stage05"]
 
 
-def python_clear_sec(stage: str, seed: int) -> float:
-    s = Sim(Profile("手動", taps_per_sec=4.0), load(stage), CORES[stage](), seed=seed)
+PROFILES = {
+    "manual": Profile("手動", taps_per_sec=4.0),
+    # 放置は自動収入の経路を通る。手動だけでは片側しか検証できない
+    "idle": Profile("放置のみ", taps_per_sec=0.1),
+}
+
+
+def python_clear_sec(stage: str, seed: int, profile_key: str) -> float:
+    p = PROFILES[profile_key]
+    s = Sim(p, load(stage), CORES[stage](), seed=seed)
     s.run(snapshot_every=1e9)
     if s.cleared_at is None:
-        raise SystemExit(f"{stage}: Python 側が時間内にクリアできなかった")
+        raise SystemExit(f"{stage}/{profile_key}: Python 側が時間内にクリアできなかった")
     return s.cleared_at
 
 
@@ -40,16 +47,17 @@ def main() -> int:
 
     failed = 0
     for stage in PORTED:
-        for seed in range(1, a.seeds + 1):
-            expected = python_clear_sec(stage, seed)
-            cmd = ["godot", "--headless", "--path", str(ROOT / "godot"),
-                   "--script", "res://tests/parity.gd", "--",
-                   stage, str(seed), f"{expected:.4f}"]
-            r = subprocess.run(cmd, capture_output=True, text=True)
-            out = (r.stdout + r.stderr).strip()
-            print(out or f"{stage} seed={seed}: 出力なし")
-            if r.returncode != 0:
-                failed += 1
+        for profile_key in PROFILES:
+            for seed in range(1, a.seeds + 1):
+                expected = python_clear_sec(stage, seed, profile_key)
+                cmd = ["godot", "--headless", "--path", str(ROOT / "godot"),
+                       "--script", "res://tests/parity.gd", "--",
+                       stage, str(seed), f"{expected:.4f}", profile_key]
+                r = subprocess.run(cmd, capture_output=True, text=True)
+                out = (r.stdout + r.stderr).strip()
+                print(out or f"{stage}/{profile_key} seed={seed}: 出力なし")
+                if r.returncode != 0:
+                    failed += 1
     if failed:
         print(f"\n{failed} 件が一致しなかった。"
               "GDScript と Python のどちらか片方だけを直していないか確認すること。",

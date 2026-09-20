@@ -154,7 +154,12 @@ Phase 0 で見つけた不具合6件は、**すべて「実装して回したら
 |---|---|---|
 | **balance** | `prototype/run_balance.py` | 手動が目標 ±20% を外れる／放置比が 1.5〜4.0 を外れる |
 | **data-sync** | `tools/sync_data.py --check` | `godot/data/` が `data/` と違う |
+| **gdscript-lint** | `tools/lint_gdscript.py` | インデントに空白混在／全角空白／括弧の不整合／Godot 3 の書き方 |
 | **parity** | Godot をヘッドレスで起動し、同じ JSON・同じ seed で回す | GDScript 版と Python 版のクリア時間が **1% 以上ずれる** |
+
+parity は **5ステージ × 手動/放置の2プロファイル**で回す。
+手動プロファイルだけでは自動収入側の経路（`auto_rate` / `auto_mult` / 反復購入）が
+ほとんど通らないため、片側しか検証できない。
 
 **parity ジョブが本設計の要**。
 これがあるかぎり、GDScript 実装と Python モデルは永久に一致し続け、
