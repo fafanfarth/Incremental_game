@@ -19,6 +19,8 @@
 | 06 | [要件定義（機能・非機能）](docs/06-requirements.md) | FR/NFR 一覧、UI/UX、技術要件 |
 | 07 | [開発スコープとロードマップ](docs/07-scope-roadmap.md) | MVP 範囲、フェーズ分割、リスク |
 
+検証スクリプト: [`docs/tools/sync_sim.py`](docs/tools/sync_sim.py)（ステージ5の同期パズルの平均倍率を算出）
+
 ## 一行で言うと
 
 > 「稼ぐ → 強くなる → もっと稼ぐ」を 5 回繰り返す。ただし毎回ルールも通貨も変わる。
