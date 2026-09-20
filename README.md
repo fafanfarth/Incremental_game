@@ -21,6 +21,11 @@
 | 08 | [周回と永久スキル表](docs/08-prestige-and-permanent-skills.md) | 記録抹消、脱獄章、永久スキル 30項目 |
 | 09 | [ハードモード「死線」](docs/09-hard-mode.md) | 制限時間、難易度3段階、時間ボーナス |
 | 10 | [課金・広告設計](docs/10-monetization.md) | 広告枠、IAP、売らないもの、収益目標 |
+| 11 | [Phase 0 実測結果](docs/11-phase0-findings.md) | シミュレータでの検証、見つかった設計の誤り、階梯の再調整 |
+
+実装:
+- [`prototype/`](prototype/README.md) — Phase 0 の数値プロトタイプ（固定60Hz・描画なし）。
+  `python3 prototype/run_balance.py` でバランスの合格判定が走る
 
 検証スクリプト:
 - [`docs/tools/sync_sim.py`](docs/tools/sync_sim.py) — ステージ5の同期パズルの平均倍率を算出
