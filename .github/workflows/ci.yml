@@ -69,5 +69,9 @@ jobs:
         working-directory: godot
         run: timeout 300 godot --headless --import || true
 
+      # 乱数だけを先に見る。parity は10分かかるので、ここで切り分ける
+      - name: 乱数が一致しているか
+        run: python3 tools/check_rng.py
+
       - name: 実装が一致しているか
-        run: python3 tools/check_parity.py
+        run: python3 tools/check_parity.py --seeds 1

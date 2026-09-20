@@ -36,6 +36,9 @@ var _log: Array[String] = []
 ## [経過秒, 生涯獲得] の並び。parity の診断に使う
 var checkpoints: Array = []
 
+## 抜き打ち検査が実際に発生した時刻。parity の診断に使う
+var inspection_times: Array = []
+
 
 func _init(p_profile: SimProfile, p_data: Dictionary, p_core: StageCore, p_seed: int = 1) -> void:
 	profile = p_profile
@@ -237,6 +240,7 @@ func _run_inspection() -> void:
 			start_boost(float(ins["hide_boost_mult"]), float(ins["hide_boost_sec"]))
 		else:
 			currency *= 1.0 - float(ins["hide_fail_loss"])
+	inspection_times.append(t)
 	next_inspection = t + rng.randf_range(
 		float(ins["interval_min_sec"]), float(ins["interval_max_sec"]))
 

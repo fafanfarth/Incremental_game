@@ -58,6 +58,19 @@ func _initialize() -> void:
 
 	var label := "%s/%s seed=%d" % [stage_id, profile_key, int(expected["seed"])]
 
+	# 検査の発生時刻を先に見る。ここがずれていれば乱数か検査の実装が原因と即断できる
+	var want_ins: Array = expected.get("inspection_times", [])
+	var got_ins: Array = sim.inspection_times.slice(0, want_ins.size())
+	for i in range(mini(want_ins.size(), got_ins.size())):
+		if absf(float(got_ins[i]) - float(want_ins[i])) > 0.05:
+			var msg := "%s : 検査 %d 回目の時刻がずれている GDScript %.2f秒 / Python %.2f秒" % [
+				label, i + 1, float(got_ins[i]), float(want_ins[i])]
+			print("  GDScript の検査時刻 %s" % str(got_ins))
+			print("  Python   の検査時刻 %s" % str(want_ins))
+			push_error(msg)
+			quit(1)
+			return
+
 	if sim.cleared_at < 0.0:
 		push_error("%s : 時間内にクリアできなかった" % label)
 		quit(1)

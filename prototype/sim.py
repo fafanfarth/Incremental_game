@@ -77,6 +77,7 @@ class Sim:
         self.t = 0.0
         self.history: list[Snapshot] = []
         self.log: list[tuple[float, str]] = []
+        self.inspection_times: list[float] = []
         self.cleared_at: float | None = None
         ins = self.d.get("inspection")
         self.s.next_inspection = ins["first_sec"] if ins else math.inf
@@ -233,6 +234,7 @@ class Sim:
                 self._start_boost(ins["hide_boost_mult"], ins["hide_boost_sec"])
             else:
                 self.s.currency *= 1 - ins["hide_fail_loss"]
+        self.inspection_times.append(self.t)
         self.s.next_inspection = self.t + self.rng.uniform(
             ins["interval_min_sec"], ins["interval_max_sec"]
         )
