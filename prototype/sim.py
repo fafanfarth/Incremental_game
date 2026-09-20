@@ -13,9 +13,10 @@ from __future__ import annotations
 
 import json
 import math
-import random
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from rng import DetRng
 
 TICK_HZ = 60
 DT = 1.0 / TICK_HZ
@@ -70,7 +71,7 @@ class Sim:
         self.p = profile
         self.d = data
         self.core = core
-        self.rng = random.Random(seed)
+        self.rng = DetRng(seed)
         self.s = State()
         self.skills = {sk["id"]: sk for sk in self.d["skills"]}
         self.t = 0.0

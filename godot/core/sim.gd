@@ -14,7 +14,7 @@ const DT := 1.0 / float(TICK_HZ)
 var profile: SimProfile
 var data: Dictionary
 var core: StageCore
-var rng := RandomNumberGenerator.new()
+var rng: DetRng
 
 var t: float = 0.0
 var cleared_at: float = -1.0
@@ -33,12 +33,15 @@ var core_state: Dictionary = {}
 var _skills: Dictionary = {}        # スキルID -> 定義
 var _log: Array[String] = []
 
+## [経過秒, 生涯獲得] の並び。parity の診断に使う
+var checkpoints: Array = []
+
 
 func _init(p_profile: SimProfile, p_data: Dictionary, p_core: StageCore, p_seed: int = 1) -> void:
 	profile = p_profile
 	data = p_data
 	core = p_core
-	rng.seed = p_seed
+	rng = DetRng.new(p_seed)
 	for sk in data["skills"]:
 		_skills[sk["id"]] = sk
 	if data.has("inspection"):
@@ -259,14 +262,21 @@ func step() -> void:
 
 
 ## ヘッドレスで一気に回す。実機では _physics_process から step() を1回ずつ呼ぶ。
-func run() -> Sim:
+##
+## snapshot_every を渡すと checkpoints に [経過秒, 生涯獲得] を積む。
+## prototype/sim.py の run() と記録位置を揃えてあること。
+func run(snapshot_every: float = 0.0) -> Sim:
 	var next_buy := 0.0
+	var next_snap := 0.0
 	while t < profile.max_sec and cleared_at < 0.0:
 		step()
 		if t >= next_buy:
 			while try_purchase() and cleared_at < 0.0:
 				pass
 			next_buy = t + 0.5
+		if snapshot_every > 0.0 and t >= next_snap:
+			checkpoints.append([t, lifetime])
+			next_snap = t + snapshot_every
 	return self
 
 

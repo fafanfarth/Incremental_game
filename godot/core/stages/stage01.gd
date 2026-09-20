@@ -109,7 +109,15 @@ func _hidden(sim: Sim) -> void:
 	var h: Dictionary = sim.data["hidden_items"]
 	var layer: int = int(sim.core_state["layer"])
 	var taken: Dictionary = sim.core_state["hidden"]
-	if not (layer in h["layers"]) or taken.has(layer):
+	if taken.has(layer):
+		return
+	# JSON の数値は Godot では float で返るため、int の層番号と直接比較しない
+	var matched := false
+	for v in h["layers"]:
+		if int(v) == layer:
+			matched = true
+			break
+	if not matched:
 		return
 	taken[layer] = true
 	var w: Dictionary = sim.data["wall"]
