@@ -111,7 +111,7 @@ func auto_mult() -> float:
 ## 実際にこのフレームで発生するタップ速度。購入操作中は手が止まる。
 func tap_rate() -> float:
 	var rate := best("autotap", 0.0)
-	if purchase_pause <= 0.0 and core.can_act(self):
+	if profile.simulated and purchase_pause <= 0.0 and core.can_act(self):
 		rate += profile.taps_per_sec * profile.active_ratio
 	return rate
 
@@ -208,6 +208,93 @@ func try_purchase() -> bool:
 		_log.append("%s %s (%d)" % [best_item["id"], best_item["name"], int(best_cost)])
 	purchase_pause = profile.purchase_pause_sec
 	return true
+
+
+# ---------- プレイヤーからの操作（UI が呼ぶ） ----------
+
+signal purchased(kind: String, id: String)
+signal cleared()
+
+## 主アクションを1回。ステージごとの意味は StageCore.player_action が決める
+func player_action() -> void:
+	core.player_action(self)
+
+
+func skill_by_id(id: String) -> Dictionary:
+	return _skills.get(id, {})
+
+
+func can_buy_skill(id: String) -> bool:
+	var sk: Dictionary = _skills.get(id, {})
+	return not sk.is_empty() and skill_available(sk) and currency >= float(sk["cost"])
+
+
+func buy_skill(id: String) -> bool:
+	if not can_buy_skill(id):
+		return false
+	var sk: Dictionary = _skills[id]
+	currency -= float(sk["cost"])
+	spent += float(sk["cost"])
+	owned[id] = true
+	_log.append("%s %s (%d)" % [id, sk["name"], int(float(sk["cost"]))])
+	purchased.emit("skill", id)
+	return true
+
+
+func repeat_price(id: String) -> float:
+	var item := core.repeat_definition(self, id)
+	return INF if item.is_empty() else core.repeat_cost(self, item)
+
+
+func can_buy_repeat(id: String) -> bool:
+	var item := core.repeat_definition(self, id)
+	if item.is_empty() or not core.repeat_available(self, item):
+		return false
+	return currency >= core.repeat_cost(self, item)
+
+
+func buy_repeat(id: String) -> bool:
+	if not can_buy_repeat(id):
+		return false
+	var item := core.repeat_definition(self, id)
+	var cost := core.repeat_cost(self, item)
+	currency -= cost
+	spent += cost
+	core.buy_repeat(self, id)
+	purchased.emit("repeat", id)
+	return true
+
+
+## 買えるだけ買う（×10 / ×MAX ボタン用）。買えた数を返す
+func buy_repeat_bulk(id: String, count: int) -> int:
+	var bought := 0
+	while bought < count and buy_repeat(id):
+		bought += 1
+	return bought
+
+
+func can_buy_bribe() -> bool:
+	return cleared_at < 0.0 and bribe_unlocked() and currency >= float(data["bribe"]["cost"])
+
+
+func buy_bribe() -> bool:
+	if not can_buy_bribe():
+		return false
+	var cost := float(data["bribe"]["cost"])
+	currency -= cost
+	spent += cost
+	cleared_at = t
+	_log.append("【賄賂】購入 → ステージクリア")
+	cleared.emit()
+	return true
+
+
+func goal() -> float:
+	return float(data["bribe"]["cost"])
+
+
+func progress() -> float:
+	return clampf(currency / goal(), 0.0, 1.0)
 
 
 # ---------- 1フレーム ----------

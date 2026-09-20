@@ -75,3 +75,8 @@ jobs:
 
       - name: 実装が一致しているか
         run: python3 tools/check_parity.py --seeds 1
+
+      # 画面が組み上がるか。見た目は見ないが、落ちることは検出できる
+      - name: 画面が組み上がるか
+        working-directory: godot
+        run: godot --headless --script res://tests/ui_smoke.gd

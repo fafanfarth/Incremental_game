@@ -24,19 +24,32 @@ func capacity(sim: Sim, item: Dictionary) -> int:
 	return base + int(sim.total("repeat_capacity"))
 
 
+## 反復購入の現在価格。repeat_items と UI からの購入で同じ式を使う
+func repeat_cost(sim: Sim, item: Dictionary) -> float:
+	var n: int = int(sim.repeats[item["id"]])
+	return float(item["base_cost"]) * pow(float(item["growth"]), n)
+
+
+func repeat_definition(sim: Sim, item_id: String) -> Dictionary:
+	for item in catalog(sim):
+		if item["id"] == item_id:
+			return item
+	return {}
+
+
+## その反復購入を今買えるか（定員と前提を見る）
+func repeat_available(sim: Sim, item: Dictionary) -> bool:
+	if int(sim.repeats[item["id"]]) >= capacity(sim, item):
+		return false
+	var req: Variant = item.get("requires", null)
+	return req == null or int(sim.repeats.get(req["id"], 0)) >= int(req["count"])
+
+
 func repeat_items(sim: Sim) -> Array:
 	var out: Array = []
 	for item in catalog(sim):
-		var n: int = int(sim.repeats[item["id"]])
-		if n >= capacity(sim, item):
-			continue
-		var req: Variant = item.get("requires", null)
-		if req != null and int(sim.repeats.get(req["id"], 0)) < int(req["count"]):
-			continue
-		out.append({
-			"id": item["id"],
-			"cost": float(item["base_cost"]) * pow(float(item["growth"]), n),
-		})
+		if repeat_available(sim, item):
+			out.append({"id": item["id"], "cost": repeat_cost(sim, item)})
 	return out
 
 
@@ -64,6 +77,12 @@ func auto_rate(_sim: Sim) -> float:
 
 
 func tick(_sim: Sim, _dt: float) -> void:
+	pass
+
+
+## プレイヤーが主アクション（タップ等）を1回行ったときの処理。
+## シミュレータは profile.taps_per_sec から自動で叩くが、実機ではこちらを呼ぶ。
+func player_action(_sim: Sim) -> void:
 	pass
 
 

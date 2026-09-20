@@ -138,5 +138,10 @@ func tick(sim: Sim, dt: float) -> void:
 		_do_tap(sim)
 
 
+func player_action(sim: Sim) -> void:
+	if can_act(sim):
+		_do_tap(sim)
+
+
 func note(sim: Sim) -> String:
 	return "層%d" % int(sim.core_state["layer"])

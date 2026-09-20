@@ -8,7 +8,7 @@ config_version=5
 
 config/name="PRISON DEBT"
 config/description="多額の借金で投獄された主人公が、5つの牢屋で100万を稼ぎ、看守に賄賂を渡して外へ出るまでのインクリメンタルゲーム。"
-run/main_scene="res://ui/boot.tscn"
+run/main_scene="res://ui/main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 ; 順序に意味がある。Platform → Balance → GameState の順に初期化される
 Platform="*res://platform/platform.gd"
 Balance="*res://core/balance.gd"
+Game="*res://core/session.gd"
 
 [display]
 
