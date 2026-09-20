@@ -6,6 +6,11 @@ extends SceneTree
 ## この環境では Godot を動かせないため、UI の誤りは CI でしか見つからない。
 ## 「シーンが読める」「ノードが生成できる」「数フレーム回しても落ちない」
 ## の3つだけを見る。見た目の正しさは人間が確認する。
+##
+## **注意**: `--script` 実行では、オートロード（Game / Platform / Balance）は
+## スクリプトのコンパイル後に登録されるため、識別子として直接書くと
+## 「Identifier not found」でコンパイルに失敗する。
+## テストからは必ず /root/... の実行時参照で取ること。
 
 const SCENES := [
 	"res://ui/main.tscn",
@@ -38,15 +43,21 @@ func _initialize() -> void:
 		node.free()
 
 	# 画面はセッションが走っていないと組めない。実機と同じ順序で起動する
+	var game := root.get_node_or_null(^"/root/Game")
+	if game == null:
+		push_error("オートロード Game が見つからない")
+		quit(2)
+		return
+
 	var host := Control.new()
 	root.add_child(host)
-	Game.attach(host)
-	Game.start_stage("stage01")
+	game.attach(host)
+	game.start_stage("stage01")
 
 	for i in range(FRAMES):
-		Game.sim.step()
+		game.sim.step()
 	print("ステージ1を %d フレーム進めた: 所持 %s / 層 %d"
-		% [FRAMES, Fmt.amount(Game.sim.currency), int(Game.sim.core_state["layer"])])
+		% [FRAMES, Fmt.amount(game.sim.currency), int(game.sim.core_state["layer"])])
 
 	for path in SCREENS:
 		var script: Script = load(path)
