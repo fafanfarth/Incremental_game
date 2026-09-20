@@ -1,0 +1,500 @@
+{
+  "id": "stage01",
+  "name": "独房棟",
+  "currency": {
+    "name": "タバコ",
+    "unit": "本"
+  },
+  "goal": 1000000,
+  "_comment": "docs/03-stages.md 3.1 と docs/04-skill-trees.md 4.2 の数値をそのまま転記したもの。バランス調整はこのファイルの編集だけで完結させる（07章 7.5-4）。",
+  "wall": {
+    "layer_damage_base": 10,
+    "layer_damage_growth": 1.35,
+    "layer_reward_base": 5,
+    "layer_reward_growth": 1.37,
+    "tap_power_base": 0.35
+  },
+  "combo": {
+    "chain_window_sec": 0.5,
+    "hold_sec": 2.0,
+    "bonus_per_10": 0.1,
+    "cap": 1.0
+  },
+  "lights_out": {
+    "period_sec": 180,
+    "duration_sec": 30,
+    "auto_mult": 2.0
+  },
+  "hidden_items": {
+    "layers": [
+      5,
+      12,
+      20,
+      30,
+      42,
+      55
+    ],
+    "reward_multiple_of_layer": 3.0
+  },
+  "inspection": {
+    "first_sec": 300,
+    "interval_min_sec": 240,
+    "interval_max_sec": 480,
+    "hide_success_rate": 0.6,
+    "hide_fail_loss": 0.1,
+    "bribe_cost": 0.05,
+    "bribe_boost_mult": 2.0,
+    "bribe_boost_sec": 90,
+    "hide_boost_mult": 1.5,
+    "hide_boost_sec": 90
+  },
+  "skills": [
+    {
+      "id": "S1-A1",
+      "tier": 1,
+      "branch": "A",
+      "name": "尖ったスプーン",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "tap_add",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "S1-A2",
+      "tier": 2,
+      "branch": "A",
+      "name": "握力",
+      "cost": 300,
+      "requires": [
+        "S1-A1"
+      ],
+      "effects": [
+        {
+          "type": "tap_mult",
+          "value": 1.5
+        }
+      ]
+    },
+    {
+      "id": "S1-A3",
+      "tier": 3,
+      "branch": "A",
+      "name": "壁の弱点",
+      "cost": 1900,
+      "requires": [
+        "S1-A2"
+      ],
+      "effects": [
+        {
+          "type": "crit",
+          "chance": 0.05,
+          "mult": 10
+        }
+      ]
+    },
+    {
+      "id": "S1-A4",
+      "tier": 4,
+      "branch": "A",
+      "name": "闇市価格",
+      "cost": 12000,
+      "requires": [
+        "S1-A3"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "S1-A5",
+      "tier": 5,
+      "branch": "A",
+      "name": "銘柄変更",
+      "cost": 80000,
+      "requires": [
+        "S1-A4"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "S1-A6",
+      "tier": 6,
+      "branch": "A",
+      "name": "一本の価値",
+      "cost": 520000,
+      "requires": [
+        "S1-A5"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": "S1-B1",
+      "tier": 1,
+      "branch": "B",
+      "name": "二度打ち",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "tap_hits",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "S1-B2",
+      "tier": 2,
+      "branch": "B",
+      "name": "コンボ延長",
+      "cost": 300,
+      "requires": [
+        "S1-B1"
+      ],
+      "effects": [
+        {
+          "type": "combo_hold",
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "id": "S1-B3",
+      "tier": 3,
+      "branch": "B",
+      "name": "コンボ上限解放",
+      "cost": 1900,
+      "requires": [
+        "S1-B2"
+      ],
+      "effects": [
+        {
+          "type": "combo_cap",
+          "value": 2.0
+        }
+      ]
+    },
+    {
+      "id": "S1-B4",
+      "tier": 4,
+      "branch": "B",
+      "name": "長い夜",
+      "cost": 12000,
+      "requires": [
+        "S1-B3"
+      ],
+      "effects": [
+        {
+          "type": "lights_out_auto_mult",
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "id": "S1-B5",
+      "tier": 5,
+      "branch": "B",
+      "name": "眠らない男",
+      "cost": 80000,
+      "requires": [
+        "S1-B4"
+      ],
+      "effects": [
+        {
+          "type": "tap_during_lights_out",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "S1-B6",
+      "tier": 6,
+      "branch": "B",
+      "name": "不眠",
+      "cost": 520000,
+      "requires": [
+        "S1-B5"
+      ],
+      "effects": [
+        {
+          "type": "combo_no_reset",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "S1-C1",
+      "tier": 1,
+      "branch": "C",
+      "name": "最初の子分",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "flat_cps",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "S1-C2",
+      "tier": 2,
+      "branch": "C",
+      "name": "仲間を増やす",
+      "cost": 300,
+      "requires": [
+        "S1-C1"
+      ],
+      "effects": [
+        {
+          "type": "repeat_capacity",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": "S1-C3",
+      "tier": 3,
+      "branch": "C",
+      "name": "見張り交代",
+      "cost": 1900,
+      "requires": [
+        "S1-C2",
+        "S1-B1"
+      ],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "id": "S1-C4",
+      "tier": 4,
+      "branch": "C",
+      "name": "組織化",
+      "cost": 12000,
+      "requires": [
+        "S1-C3"
+      ],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 2.0
+        }
+      ]
+    },
+    {
+      "id": "S1-C5",
+      "tier": 5,
+      "branch": "C",
+      "name": "房のボス",
+      "cost": 80000,
+      "requires": [
+        "S1-C4"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "S1-C6",
+      "tier": 6,
+      "branch": "C",
+      "name": "独房棟の支配",
+      "cost": 520000,
+      "requires": [
+        "S1-C5"
+      ],
+      "effects": [
+        {
+          "type": "auto_from_tap",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "id": "S1-D1",
+      "tier": 1,
+      "branch": "D",
+      "name": "枕の下",
+      "cost": 50,
+      "requires": [],
+      "effects": []
+    },
+    {
+      "id": "S1-D2",
+      "tier": 2,
+      "branch": "D",
+      "name": "隠し場所",
+      "cost": 300,
+      "requires": [
+        "S1-D1"
+      ],
+      "effects": [
+        {
+          "type": "hidden_item_reward_mult",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "S1-D3",
+      "tier": 3,
+      "branch": "D",
+      "name": "ライター",
+      "cost": 1900,
+      "requires": [
+        "S1-D2"
+      ],
+      "effects": [
+        {
+          "type": "booster",
+          "mult": 3,
+          "duration_sec": 30,
+          "cooldown_sec": 300
+        }
+      ]
+    },
+    {
+      "id": "S1-D4",
+      "tier": 4,
+      "branch": "D",
+      "name": "賭け事の芽",
+      "cost": 12000,
+      "requires": [
+        "S1-D3"
+      ],
+      "effects": [
+        {
+          "type": "lucky",
+          "chance": 0.01,
+          "amount": 1000
+        }
+      ]
+    },
+    {
+      "id": "S1-D5",
+      "tier": 5,
+      "branch": "D",
+      "name": "検査の勘",
+      "cost": 80000,
+      "requires": [
+        "S1-D4"
+      ],
+      "effects": [
+        {
+          "type": "hide_success_rate",
+          "value": 0.85
+        }
+      ]
+    },
+    {
+      "id": "S1-D6",
+      "tier": 6,
+      "branch": "D",
+      "name": "壁の向こう",
+      "cost": 520000,
+      "requires": [
+        "S1-D5"
+      ],
+      "effects": [
+        {
+          "type": "hidden_item_reward_mult",
+          "value": 10
+        }
+      ]
+    }
+  ],
+  "bribe": {
+    "id": "S1-T7",
+    "name": "看守への賄賂",
+    "cost": 1000000,
+    "unlock_rule": "all_branches_tier4"
+  },
+  "legacy": [
+    {
+      "id": "S1-L1",
+      "name": "スプーンの記憶",
+      "cost": 3000000
+    },
+    {
+      "id": "S1-L2",
+      "name": "タバコの信用",
+      "cost": 20000000
+    },
+    {
+      "id": "S1-L3",
+      "name": "煙の合図",
+      "cost": 100000000
+    },
+    {
+      "id": "S1-L4",
+      "name": "密輸ルート：独房棟",
+      "cost": 500000000
+    }
+  ],
+  "repeats": [
+    {
+      "id": "rookie",
+      "base_cost": 15,
+      "growth": 1.15,
+      "cps": 0.2,
+      "capacity": 20,
+      "requires": null
+    },
+    {
+      "id": "veteran",
+      "base_cost": 800,
+      "growth": 1.15,
+      "cps": 3.5,
+      "capacity": 10,
+      "requires": {
+        "id": "rookie",
+        "count": 10
+      }
+    },
+    {
+      "id": "sweeper",
+      "base_cost": 45000,
+      "growth": 1.15,
+      "cps": 60.0,
+      "capacity": 4,
+      "requires": {
+        "id": "veteran",
+        "count": 10
+      }
+    },
+    {
+      "id": "trusty",
+      "base_cost": 2600000,
+      "growth": 1.15,
+      "cps": 1100.0,
+      "capacity": 40,
+      "requires": {
+        "id": "sweeper",
+        "count": 10
+      }
+    }
+  ]
+}

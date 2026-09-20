@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  balance:
+    name: バランス判定
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # 手動クリアが目標 ±20%、放置÷手動 が 1.5〜4.0 を外れたら落ちる。
+      # Phase 0 の不具合6件はすべて「回してみたら壊れていた」類で、
+      # 目視では1つも見つからなかった（docs/11）。
+      - name: 全5ステージのバランス
+        run: python3 prototype/run_balance.py --seeds 3
+
+  data-sync:
+    name: データ同期の検査
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # バランスの正は data/ ただ1箇所。godot/data/ は生成物（NFR-45）
+      - run: python3 tools/sync_data.py --check
+
+  parity:
+    name: GDScript と Python の一致
+    runs-on: ubuntu-latest
+    needs: [data-sync]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Godot を用意
+        run: |
+          set -eux
+          VERSION=4.3-stable
+          curl -sSLo godot.zip \
+            "https://github.com/godotengine/godot/releases/download/${VERSION}/Godot_v${VERSION}_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv Godot_v${VERSION}_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --headless --version
+
+      # インポートを走らせておかないとヘッドレス実行で res:// が解決できない
+      - name: プロジェクトをインポート
+        working-directory: godot
+        run: timeout 300 godot --headless --import || true
+
+      - name: 実装が一致しているか
+        run: python3 tools/check_parity.py

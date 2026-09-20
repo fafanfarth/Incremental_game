@@ -92,7 +92,8 @@ def main() -> int:
         curve(f"stage{a.curve:02d}")
         return 0
     stages = [f"stage{a.stage:02d}"] if a.stage else sorted(TARGETS)
-    stages = [s for s in stages if (Path(__file__).parent / "data" / f"{s}.json").exists()]
+    root = Path(__file__).resolve().parent.parent
+    stages = [s for s in stages if (root / "data" / f"{s}.json").exists()]
     return 1 if report(stages, a.seeds) else 0
 
 

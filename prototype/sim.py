@@ -20,7 +20,7 @@ from pathlib import Path
 TICK_HZ = 60
 DT = 1.0 / TICK_HZ
 
-DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 
 def load(stage: str) -> dict:

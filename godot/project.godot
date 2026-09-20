@@ -1,0 +1,93 @@
+; Godot 4 プロジェクト設定
+; 12章 12.2 の①〜④（Steam 移植のために今決めること）をここで固定している。
+; これらの値を変えるときは docs/12-godot-architecture.md も同時に直すこと。
+
+config_version=5
+
+[application]
+
+config/name="PRISON DEBT"
+config/description="多額の借金で投獄された主人公が、5つの牢屋で100万を稼ぎ、看守に賄賂を渡して外へ出るまでのインクリメンタルゲーム。"
+run/main_scene="res://ui/boot.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+; 順序に意味がある。Platform → Balance → GameState の順に初期化される
+Platform="*res://platform/platform.gd"
+Balance="*res://core/balance.gd"
+
+[display]
+
+; --- 12.2-① 画面のスケーリング（Steam 移植の最重要項目）---
+; expand: 画面が横長になるほど左右に余白が増える。切れも歪みもしない。
+; これにより 19.5:9 の実機でも 21:9 でも Steam Deck(1280x800) でも
+; レイアウトが破綻せず、中央盤面が広くなるだけで済む。
+; UI は必ずアンカー基準で配置すること。絶対座標は禁止（NFR-40）。
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+; モバイルは横持ち固定（NFR-01）。デスクトップ書き出しでは無視される
+window/handheld/orientation=1
+
+[input_devices]
+
+; タッチをマウスイベントに正規化する。ドラッグ操作（S2の配置・S4の合成・
+; S5の位相合わせ）を InputEventMouseMotion 一本で書けるようにするため（12.2-②）
+pointing/emulate_mouse_from_touch=true
+pointing/emulate_touch_from_mouse=false
+
+[input]
+
+; --- 12.2-② 入力はアクション経由（NFR-41）---
+; モバイルはUIボタンから、Steam ではここにキーボード／ゲームパッドを足すだけ。
+act_primary={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"keycode":32,"physical_keycode":0,"pressed":false)]
+}
+act_secondary={
+"deadzone": 0.5,
+"events": []
+}
+nav_hub={
+"deadzone": 0.5,
+"events": []
+}
+nav_tree={
+"deadzone": 0.5,
+"events": []
+}
+nav_codex={
+"deadzone": 0.5,
+"events": []
+}
+nav_settings={
+"deadzone": 0.5,
+"events": []
+}
+boost={
+"deadzone": 0.5,
+"events": []
+}
+pause={
+"deadzone": 0.5,
+"events": []
+}
+
+[physics]
+
+; --- 12.2-④ 決定論コア（NFR-43 / NFR-30）---
+; シミュレーションは _physics_process で 60Hz 固定。描画レートと分離する。
+; ハードモードの残り時間がフレームレートで変わってはならない。
+common/physics_ticks_per_second=60
+common/max_physics_steps_per_frame=8
+
+[rendering]
+
+; gl_compatibility: モバイルの省電力と、Steam Deck・旧GPU対応を兼ねる（NFR-47）
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

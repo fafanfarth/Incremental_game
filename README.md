@@ -22,10 +22,13 @@
 | 09 | [ハードモード「死線」](docs/09-hard-mode.md) | 制限時間、難易度3段階、時間ボーナス |
 | 10 | [課金・広告設計](docs/10-monetization.md) | 広告枠、IAP、売らないもの、収益目標 |
 | 11 | [Phase 0 実測結果](docs/11-phase0-findings.md) | シミュレータでの検証、見つかった設計の誤り、階梯の再調整 |
+| 12 | [技術設計（Godot 4 / Steam移植）](docs/12-godot-architecture.md) | エンジン選定、Steam版のために今決めること、CI |
 
 実装:
-- [`prototype/`](prototype/README.md) — Phase 0 の数値プロトタイプ（固定60Hz・描画なし）。
-  `python3 prototype/run_balance.py` でバランスの合格判定が走る
+- [`godot/`](godot/README.md) — Godot 4 プロジェクト。iOS / Android 先行、Steam は後から
+- [`prototype/`](prototype/README.md) — Python の数値シミュレータ（固定60Hz・描画なし）。
+  CI のバランス判定に使い続ける
+- [`data/`](data/) — **バランス数値の唯一の正**。Python も Godot もここを読む
 
 検証スクリプト:
 - [`docs/tools/sync_sim.py`](docs/tools/sync_sim.py) — ステージ5の同期パズルの平均倍率を算出

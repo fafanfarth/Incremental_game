@@ -1,0 +1,423 @@
+{
+  "id": "stage02",
+  "name": "労役棟",
+  "currency": {
+    "name": "作業票",
+    "unit": "枚"
+  },
+  "goal": 1000000,
+  "_comment": "docs/03 3.2。加工1段で価値 ×12 だが k個から1個しかできない（歩留まり）。正味は ×(12/k)。歩留まりを入れないと段数だけで成長予算を食い潰す。",
+  "line": {
+    "lanes_base": 3,
+    "lane_rate": 0.17,
+    "level_bonus": 0.12,
+    "value_growth": 12,
+    "clog_bonus_items": 3.0,
+    "inputs_per_item": 3.0
+  },
+  "repeats": [
+    {
+      "id": "machine",
+      "base_cost": 40,
+      "growth": 1.15,
+      "capacity": 60,
+      "requires": null
+    }
+  ],
+  "skills": [
+    {
+      "id": "S2-A1",
+      "tier": 1,
+      "branch": "A",
+      "name": "検品免除",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.031
+        }
+      ]
+    },
+    {
+      "id": "S2-A2",
+      "tier": 2,
+      "branch": "A",
+      "name": "中間品の転売",
+      "cost": 300,
+      "requires": [
+        "S2-A1"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.045
+        }
+      ]
+    },
+    {
+      "id": "S2-A3",
+      "tier": 3,
+      "branch": "A",
+      "name": "品質等級",
+      "cost": 1900,
+      "requires": [
+        "S2-A2"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.07
+        }
+      ]
+    },
+    {
+      "id": "S2-A4",
+      "tier": 4,
+      "branch": "A",
+      "name": "出荷契約",
+      "cost": 12000,
+      "requires": [
+        "S2-A3"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.123
+        }
+      ]
+    },
+    {
+      "id": "S2-A5",
+      "tier": 5,
+      "branch": "A",
+      "name": "工程追加",
+      "cost": 80000,
+      "requires": [
+        "S2-A4"
+      ],
+      "effects": [
+        {
+          "type": "chain_depth",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "S2-A6",
+      "tier": 6,
+      "branch": "A",
+      "name": "独占納品",
+      "cost": 520000,
+      "requires": [
+        "S2-A5"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.261
+        }
+      ]
+    },
+    {
+      "id": "S2-B1",
+      "tier": 1,
+      "branch": "B",
+      "name": "注油",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.024
+        }
+      ]
+    },
+    {
+      "id": "S2-B2",
+      "tier": 2,
+      "branch": "B",
+      "name": "四本目の稼働",
+      "cost": 300,
+      "requires": [
+        "S2-B1"
+      ],
+      "effects": [
+        {
+          "type": "lanes",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "S2-B3",
+      "tier": 3,
+      "branch": "B",
+      "name": "同時処理",
+      "cost": 1900,
+      "requires": [
+        "S2-B2"
+      ],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.058
+        }
+      ]
+    },
+    {
+      "id": "S2-B4",
+      "tier": 4,
+      "branch": "B",
+      "name": "残業の常態化",
+      "cost": 12000,
+      "requires": [
+        "S2-B3"
+      ],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.045
+        }
+      ]
+    },
+    {
+      "id": "S2-B5",
+      "tier": 5,
+      "branch": "B",
+      "name": "三交代制",
+      "cost": 80000,
+      "requires": [
+        "S2-B4"
+      ],
+      "effects": [
+        {
+          "type": "lanes",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "S2-B6",
+      "tier": 6,
+      "branch": "B",
+      "name": "止まらない工場",
+      "cost": 520000,
+      "requires": [
+        "S2-B5"
+      ],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.082
+        }
+      ]
+    },
+    {
+      "id": "S2-C1",
+      "tier": 1,
+      "branch": "C",
+      "name": "素材の自動投入",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "chain_depth",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "S2-C2",
+      "tier": 2,
+      "branch": "C",
+      "name": "自動搬出",
+      "cost": 300,
+      "requires": [
+        "S2-C1"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 1.07
+        }
+      ]
+    },
+    {
+      "id": "S2-C3",
+      "tier": 3,
+      "branch": "C",
+      "name": "整備工",
+      "cost": 1900,
+      "requires": [
+        "S2-C2"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 1.123
+        }
+      ]
+    },
+    {
+      "id": "S2-C4",
+      "tier": 4,
+      "branch": "C",
+      "name": "熟練整備工",
+      "cost": 12000,
+      "requires": [
+        "S2-C3"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 1.082
+        }
+      ]
+    },
+    {
+      "id": "S2-C5",
+      "tier": 5,
+      "branch": "C",
+      "name": "自動ノルマ達成",
+      "cost": 80000,
+      "requires": [
+        "S2-C4"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 1.104
+        }
+      ]
+    },
+    {
+      "id": "S2-C6",
+      "tier": 6,
+      "branch": "C",
+      "name": "無人工場",
+      "cost": 520000,
+      "requires": [
+        "S2-C5"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 1.166
+        }
+      ]
+    },
+    {
+      "id": "S2-D1",
+      "tier": 1,
+      "branch": "D",
+      "name": "隣接の心得",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.031
+        }
+      ]
+    },
+    {
+      "id": "S2-D2",
+      "tier": 2,
+      "branch": "D",
+      "name": "工程の心得",
+      "cost": 300,
+      "requires": [
+        "S2-D1"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.104
+        }
+      ]
+    },
+    {
+      "id": "S2-D3",
+      "tier": 3,
+      "branch": "D",
+      "name": "設計図",
+      "cost": 1900,
+      "requires": [
+        "S2-D2"
+      ],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.024
+        }
+      ]
+    },
+    {
+      "id": "S2-D4",
+      "tier": 4,
+      "branch": "D",
+      "name": "過積載",
+      "cost": 12000,
+      "requires": [
+        "S2-D3"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.082
+        }
+      ]
+    },
+    {
+      "id": "S2-D5",
+      "tier": 5,
+      "branch": "D",
+      "name": "ノルマ操作",
+      "cost": 80000,
+      "requires": [
+        "S2-D4"
+      ],
+      "effects": [
+        {
+          "type": "chain_depth",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "S2-D6",
+      "tier": 6,
+      "branch": "D",
+      "name": "ライン完全稼働",
+      "cost": 520000,
+      "requires": [
+        "S2-D5"
+      ],
+      "effects": [
+        {
+          "type": "line_speed",
+          "value": 1.045
+        }
+      ]
+    }
+  ],
+  "bribe": {
+    "id": "T7",
+    "name": "看守への賄賂",
+    "cost": 1000000,
+    "unlock_rule": "all_branches_tier4"
+  },
+  "inspection": {
+    "first_sec": 300,
+    "interval_min_sec": 240,
+    "interval_max_sec": 480,
+    "hide_success_rate": 0.6,
+    "hide_fail_loss": 0.1,
+    "hide_boost_mult": 1.5,
+    "hide_boost_sec": 90,
+    "bribe_cost": 0.05,
+    "bribe_boost_mult": 2.0,
+    "bribe_boost_sec": 90
+  }
+}

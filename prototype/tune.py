@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from cores import CORES  # noqa: E402
 from sim import Profile, Sim, load  # noqa: E402
 
-DATA = Path(__file__).parent / "data"
+DATA = Path(__file__).resolve().parent.parent / "data"
 
 # 値が「倍率」である効果だけを減衰させる。個数・確率・上限は触らない
 MULT_TYPES = {
