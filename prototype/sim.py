@@ -230,12 +230,12 @@ class Sim:
             self._start_boost(ins["bribe_boost_mult"], ins["bribe_boost_sec"])
         else:
             rate = self.best("hide_success_rate", ins["hide_success_rate"])
-            if self.rng.random() < rate:
+            if self.rng.next_float() < rate:
                 self._start_boost(ins["hide_boost_mult"], ins["hide_boost_sec"])
             else:
                 self.s.currency *= 1 - ins["hide_fail_loss"]
         self.inspection_times.append(self.t)
-        self.s.next_inspection = self.t + self.rng.uniform(
+        self.s.next_inspection = self.t + self.rng.range_float(
             ins["interval_min_sec"], ins["interval_max_sec"]
         )
 

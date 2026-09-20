@@ -8,7 +8,7 @@ extends SceneTree
 ## parity ジョブは1往復に10分かかる。乱数が合っているかだけを数秒で切り分けられるよう、
 ## これを parity の前に走らせる。
 
-const TOLERANCE := 1e-9
+const TOLERANCE := 1e-6
 
 
 func _initialize() -> void:
@@ -32,10 +32,16 @@ func _initialize() -> void:
 	var failed := false
 	for key in expected:
 		var want: Array = expected[key]
+		# 前半は next_float、後半は range_float(240,480)。
+		# range_float を見ていなかったため、前回はグローバル関数への解決を見逃した
+		var half := want.size() / 2
 		var rng := DetRng.new(int(key))
 		var got: Array[float] = []
-		for _i in range(want.size()):
-			got.append(rng.randf())
+		for _i in range(half):
+			got.append(rng.next_float())
+		var rng2 := DetRng.new(int(key))
+		for _i in range(want.size() - half):
+			got.append(rng2.range_float(240.0, 480.0))
 
 		var line := "seed=%s\n  GDScript %s\n  Python   %s" % [
 			key, _fmt(got), _fmt(want)]

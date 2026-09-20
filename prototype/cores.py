@@ -136,12 +136,12 @@ class CellBlockCore(StageCore):
 
         power = self.tap_power(sim) * self.combo_mult(sim)
         for e in sim.effects("crit"):
-            if sim.rng.random() < e["chance"]:
+            if sim.rng.next_float() < e["chance"]:
                 power *= e["mult"]
             break
         amount = power * sim.manual_mult
         for e in sim.effects("lucky"):
-            if sim.rng.random() < e["chance"]:
+            if sim.rng.next_float() < e["chance"]:
                 amount += e["amount"] * sim.manual_mult
             break
         sim.gain_manual(amount)

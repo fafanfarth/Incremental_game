@@ -34,9 +34,13 @@ func _next() -> int:
 	return x
 
 
-func randf() -> float:
+## メソッド名を randf / randf_range にしてはならない。
+## Godot には同名の @GlobalScope 関数があり、クラス内での修飾なし呼び出しが
+## そちらに解決されてプロセスごとに変わる値を返す。
+## check_rng が randf() を直接呼ぶだけだったため、この不具合は通過していた。
+func next_float() -> float:
 	return float(_next()) / 4294967296.0
 
 
-func randf_range(a: float, b: float) -> float:
-	return a + (b - a) * randf()
+func range_float(a: float, b: float) -> float:
+	return a + (b - a) * next_float()

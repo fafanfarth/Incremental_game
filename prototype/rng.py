@@ -28,8 +28,8 @@ class DetRng:
         self.state = x
         return x
 
-    def random(self) -> float:
+    def next_float(self) -> float:
         return self._next() / 4294967296.0
 
-    def uniform(self, a: float, b: float) -> float:
-        return a + (b - a) * self.random()
+    def range_float(self, a: float, b: float) -> float:
+        return a + (b - a) * self.next_float()

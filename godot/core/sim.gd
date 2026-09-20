@@ -236,12 +236,12 @@ func _run_inspection() -> void:
 		start_boost(float(ins["bribe_boost_mult"]), float(ins["bribe_boost_sec"]))
 	else:
 		var rate := best("hide_success_rate", float(ins["hide_success_rate"]))
-		if rng.randf() < rate:
+		if rng.next_float() < rate:
 			start_boost(float(ins["hide_boost_mult"]), float(ins["hide_boost_sec"]))
 		else:
 			currency *= 1.0 - float(ins["hide_fail_loss"])
 	inspection_times.append(t)
-	next_inspection = t + rng.randf_range(
+	next_inspection = t + rng.range_float(
 		float(ins["interval_min_sec"]), float(ins["interval_max_sec"]))
 
 

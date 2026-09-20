@@ -78,14 +78,14 @@ func _do_tap(sim: Sim) -> void:
 	var crits := sim.effects("crit")
 	if not crits.is_empty():
 		var e: Dictionary = crits[0]
-		if sim.rng.randf() < float(e["chance"]):
+		if sim.rng.next_float() < float(e["chance"]):
 			power *= float(e["mult"])
 
 	var amount := power * sim.manual_mult()
 	var luckies := sim.effects("lucky")
 	if not luckies.is_empty():
 		var e2: Dictionary = luckies[0]
-		if sim.rng.randf() < float(e2["chance"]):
+		if sim.rng.next_float() < float(e2["chance"]):
 			amount += float(e2["amount"]) * sim.manual_mult()
 	sim.gain_manual(amount)
 

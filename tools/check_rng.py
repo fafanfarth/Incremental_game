@@ -25,8 +25,14 @@ COUNT = 5
 def main() -> int:
     expected = {}
     for seed in SEEDS:
+        # next_float だけでなく range_float も見る。
+        # range_float の中で修飾なしに randf() を呼ぶと Godot のグローバル関数に
+        # 解決されてしまう。前回はここを見ていなかったため不具合を通していた
         r = DetRng(seed)
-        expected[str(seed)] = [r.random() for _ in range(COUNT)]
+        seq = [r.next_float() for _ in range(COUNT)]
+        r2 = DetRng(seed)
+        seq += [r2.range_float(240.0, 480.0) for _ in range(COUNT)]
+        expected[str(seed)] = seq
 
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "rng.json"
