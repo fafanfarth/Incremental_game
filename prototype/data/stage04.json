@@ -1,0 +1,425 @@
+{
+  "id": "stage04",
+  "name": "医務棟",
+  "currency": {
+    "name": "錠剤",
+    "unit": "錠"
+  },
+  "goal": 1000000,
+  "_comment": "docs/03 3.4。R1 あたりの価値は (3/2)^(R-1) で伸びるが、盤面が有限なので到達ランクに上限がある。",
+  "board": {
+    "cells_base": 30,
+    "spawn_sec": 1.5,
+    "value_growth": 3.0,
+    "base_value": 1.0,
+    "occupancy": 0.6,
+    "max_rank": 10,
+    "taps_for_full_speed": 4.0,
+    "potency_bonus": 0.1
+  },
+  "repeats": [
+    {
+      "id": "potency",
+      "base_cost": 50,
+      "growth": 1.15,
+      "capacity": 45,
+      "requires": null
+    }
+  ],
+  "skills": [
+    {
+      "id": "S4-A1",
+      "tier": 1,
+      "branch": "A",
+      "name": "正規処方",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.158
+        }
+      ]
+    },
+    {
+      "id": "S4-A2",
+      "tier": 2,
+      "branch": "A",
+      "name": "濃度調整",
+      "cost": 300,
+      "requires": [
+        "S4-A1"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.247
+        }
+      ]
+    },
+    {
+      "id": "S4-A3",
+      "tier": 3,
+      "branch": "A",
+      "name": "高ランク特需",
+      "cost": 1900,
+      "requires": [
+        "S4-A2"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.362
+        }
+      ]
+    },
+    {
+      "id": "S4-A4",
+      "tier": 4,
+      "branch": "A",
+      "name": "裏ルート",
+      "cost": 12000,
+      "requires": [
+        "S4-A3"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.577
+        }
+      ]
+    },
+    {
+      "id": "S4-A5",
+      "tier": 5,
+      "branch": "A",
+      "name": "新薬",
+      "cost": 80000,
+      "requires": [
+        "S4-A4"
+      ],
+      "effects": [
+        {
+          "type": "max_rank",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "S4-A6",
+      "tier": 6,
+      "branch": "A",
+      "name": "特効薬",
+      "cost": 520000,
+      "requires": [
+        "S4-A5"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 2.059
+        }
+      ]
+    },
+    {
+      "id": "S4-B1",
+      "tier": 1,
+      "branch": "B",
+      "name": "生成促進",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "spawn_speed",
+          "value": 1.188
+        }
+      ]
+    },
+    {
+      "id": "S4-B2",
+      "tier": 2,
+      "branch": "B",
+      "name": "盤面拡張 I",
+      "cost": 300,
+      "requires": [
+        "S4-B1"
+      ],
+      "effects": [
+        {
+          "type": "cells",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": "S4-B3",
+      "tier": 3,
+      "branch": "B",
+      "name": "同時生成",
+      "cost": 1900,
+      "requires": [
+        "S4-B2"
+      ],
+      "effects": [
+        {
+          "type": "spawn_batch",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "S4-B4",
+      "tier": 4,
+      "branch": "B",
+      "name": "盤面拡張 II",
+      "cost": 12000,
+      "requires": [
+        "S4-B3"
+      ],
+      "effects": [
+        {
+          "type": "cells",
+          "value": 20
+        }
+      ]
+    },
+    {
+      "id": "S4-B5",
+      "tier": 5,
+      "branch": "B",
+      "name": "連鎖合成",
+      "cost": 80000,
+      "requires": [
+        "S4-B4"
+      ],
+      "effects": [
+        {
+          "type": "spawn_speed",
+          "value": 1.472
+        }
+      ]
+    },
+    {
+      "id": "S4-B6",
+      "tier": 6,
+      "branch": "B",
+      "name": "無限生成",
+      "cost": 520000,
+      "requires": [
+        "S4-B5"
+      ],
+      "effects": [
+        {
+          "type": "spawn_speed",
+          "value": 1.826
+        }
+      ]
+    },
+    {
+      "id": "S4-C1",
+      "tier": 1,
+      "branch": "C",
+      "name": "自動換金（R1）",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "id": "S4-C2",
+      "tier": 2,
+      "branch": "C",
+      "name": "換金ライン設定",
+      "cost": 300,
+      "requires": [
+        "S4-C1"
+      ],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 1.0
+        }
+      ]
+    },
+    {
+      "id": "S4-C3",
+      "tier": 3,
+      "branch": "C",
+      "name": "合成アーム",
+      "cost": 1900,
+      "requires": [
+        "S4-C2"
+      ],
+      "effects": [
+        {
+          "type": "auto_merge",
+          "value": 0.33
+        }
+      ]
+    },
+    {
+      "id": "S4-C4",
+      "tier": 4,
+      "branch": "C",
+      "name": "二本目のアーム",
+      "cost": 12000,
+      "requires": [
+        "S4-C3"
+      ],
+      "effects": [
+        {
+          "type": "auto_merge",
+          "value": 0.66
+        }
+      ]
+    },
+    {
+      "id": "S4-C5",
+      "tier": 5,
+      "branch": "C",
+      "name": "最適化アーム",
+      "cost": 80000,
+      "requires": [
+        "S4-C4"
+      ],
+      "effects": [
+        {
+          "type": "auto_mult",
+          "value": 1.305
+        }
+      ]
+    },
+    {
+      "id": "S4-C6",
+      "tier": 6,
+      "branch": "C",
+      "name": "全自動調剤",
+      "cost": 520000,
+      "requires": [
+        "S4-C5"
+      ],
+      "effects": [
+        {
+          "type": "auto_merge",
+          "value": 1.0
+        }
+      ]
+    },
+    {
+      "id": "S4-D1",
+      "tier": 1,
+      "branch": "D",
+      "name": "手袋",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.127
+        }
+      ]
+    },
+    {
+      "id": "S4-D2",
+      "tier": 2,
+      "branch": "D",
+      "name": "清掃",
+      "cost": 300,
+      "requires": [
+        "S4-D1"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.158
+        }
+      ]
+    },
+    {
+      "id": "S4-D3",
+      "tier": 3,
+      "branch": "D",
+      "name": "処方箋の優先枠",
+      "cost": 1900,
+      "requires": [
+        "S4-D2"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.305
+        }
+      ]
+    },
+    {
+      "id": "S4-D4",
+      "tier": 4,
+      "branch": "D",
+      "name": "副作用の利用",
+      "cost": 12000,
+      "requires": [
+        "S4-D3"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.472
+        }
+      ]
+    },
+    {
+      "id": "S4-D5",
+      "tier": 5,
+      "branch": "D",
+      "name": "カルテ特典",
+      "cost": 80000,
+      "requires": [
+        "S4-D4"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.362
+        }
+      ]
+    },
+    {
+      "id": "S4-D6",
+      "tier": 6,
+      "branch": "D",
+      "name": "劇薬",
+      "cost": 520000,
+      "requires": [
+        "S4-D5"
+      ],
+      "effects": [
+        {
+          "type": "manual_mult",
+          "value": 1.826
+        }
+      ]
+    }
+  ],
+  "bribe": {
+    "id": "T7",
+    "name": "看守への賄賂",
+    "cost": 1000000,
+    "unlock_rule": "all_branches_tier4"
+  },
+  "inspection": {
+    "first_sec": 300,
+    "interval_min_sec": 240,
+    "interval_max_sec": 480,
+    "hide_success_rate": 0.6,
+    "hide_fail_loss": 0.1,
+    "hide_boost_mult": 1.5,
+    "hide_boost_sec": 90,
+    "bribe_cost": 0.05,
+    "bribe_boost_mult": 2.0,
+    "bribe_boost_sec": 90
+  }
+}

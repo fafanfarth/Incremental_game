@@ -1,0 +1,429 @@
+{
+  "id": "stage03",
+  "name": "食堂棟",
+  "currency": {
+    "name": "チップ",
+    "unit": "枚"
+  },
+  "goal": 1000000,
+  "_comment": "docs/03 3.3。割合ベットの複利。成長率 r = (実効期待値-1) × ベット率。ベット率上限と疑念値だけが律速。",
+  "dice": {
+    "ev_base": 1.25,
+    "ev_at_max_suspicion": 0.95,
+    "bet_ratio_base": 0.02,
+    "manual_roll_sec": 1.8,
+    "auto_roll_sec": 5.0,
+    "suspicion_per_bet": 0.8,
+    "suspicion_decay": 1.5,
+    "throttle_at": 45.0,
+    "cool_down_at": 75.0
+  },
+  "scratch": {
+    "per_card": 0.8
+  },
+  "repeats": [
+    {
+      "id": "chips",
+      "base_cost": 60,
+      "growth": 1.15,
+      "capacity": 40,
+      "requires": null
+    }
+  ],
+  "skills": [
+    {
+      "id": "S3-A1",
+      "tier": 1,
+      "branch": "A",
+      "name": "度胸",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "bet_ratio",
+          "value": 0.03
+        }
+      ]
+    },
+    {
+      "id": "S3-A2",
+      "tier": 2,
+      "branch": "A",
+      "name": "配当交渉",
+      "cost": 300,
+      "requires": [
+        "S3-A1"
+      ],
+      "effects": [
+        {
+          "type": "ev_add",
+          "value": 0.125
+        }
+      ]
+    },
+    {
+      "id": "S3-A3",
+      "tier": 3,
+      "branch": "A",
+      "name": "ゾロ目特典",
+      "cost": 1900,
+      "requires": [
+        "S3-A2"
+      ],
+      "effects": [
+        {
+          "type": "ev_add",
+          "value": 0.125
+        }
+      ]
+    },
+    {
+      "id": "S3-A4",
+      "tier": 4,
+      "branch": "A",
+      "name": "大勝負",
+      "cost": 12000,
+      "requires": [
+        "S3-A3"
+      ],
+      "effects": [
+        {
+          "type": "bet_ratio",
+          "value": 0.05
+        }
+      ]
+    },
+    {
+      "id": "S3-A5",
+      "tier": 5,
+      "branch": "A",
+      "name": "高額卓",
+      "cost": 80000,
+      "requires": [
+        "S3-A4"
+      ],
+      "effects": [
+        {
+          "type": "ev_add",
+          "value": 0.1
+        }
+      ]
+    },
+    {
+      "id": "S3-A6",
+      "tier": 6,
+      "branch": "A",
+      "name": "青天井",
+      "cost": 520000,
+      "requires": [
+        "S3-A5"
+      ],
+      "effects": [
+        {
+          "type": "bet_ratio",
+          "value": 0.08
+        }
+      ]
+    },
+    {
+      "id": "S3-B1",
+      "tier": 1,
+      "branch": "B",
+      "name": "早投げ",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "roll_speed",
+          "value": 1.109
+        }
+      ]
+    },
+    {
+      "id": "S3-B2",
+      "tier": 2,
+      "branch": "B",
+      "name": "二個振り",
+      "cost": 300,
+      "requires": [
+        "S3-B1"
+      ],
+      "effects": [
+        {
+          "type": "scratch_mult",
+          "value": 1.194
+        }
+      ]
+    },
+    {
+      "id": "S3-B3",
+      "tier": 3,
+      "branch": "B",
+      "name": "連投",
+      "cost": 1900,
+      "requires": [
+        "S3-B2"
+      ],
+      "effects": [
+        {
+          "type": "roll_speed",
+          "value": 1.09
+        }
+      ]
+    },
+    {
+      "id": "S3-B4",
+      "tier": 4,
+      "branch": "B",
+      "name": "パンくじ増刷",
+      "cost": 12000,
+      "requires": [
+        "S3-B3"
+      ],
+      "effects": [
+        {
+          "type": "scratch_mult",
+          "value": 1.325
+        }
+      ]
+    },
+    {
+      "id": "S3-B5",
+      "tier": 5,
+      "branch": "B",
+      "name": "五個振り",
+      "cost": 80000,
+      "requires": [
+        "S3-B4"
+      ],
+      "effects": [
+        {
+          "type": "roll_speed",
+          "value": 1.128
+        }
+      ]
+    },
+    {
+      "id": "S3-B6",
+      "tier": 6,
+      "branch": "B",
+      "name": "閉店なし",
+      "cost": 520000,
+      "requires": [
+        "S3-B5"
+      ],
+      "effects": [
+        {
+          "type": "roll_speed",
+          "value": 1.194
+        }
+      ]
+    },
+    {
+      "id": "S3-C1",
+      "tier": 1,
+      "branch": "C",
+      "name": "オートスクラッチ",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "id": "S3-C2",
+      "tier": 2,
+      "branch": "C",
+      "name": "券の自動購入",
+      "cost": 300,
+      "requires": [
+        "S3-C1"
+      ],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 1.0
+        }
+      ]
+    },
+    {
+      "id": "S3-C3",
+      "tier": 3,
+      "branch": "C",
+      "name": "代打ち",
+      "cost": 1900,
+      "requires": [
+        "S3-C2"
+      ],
+      "effects": [
+        {
+          "type": "auto_roll",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "S3-C4",
+      "tier": 4,
+      "branch": "C",
+      "name": "損切りライン",
+      "cost": 12000,
+      "requires": [
+        "S3-C3"
+      ],
+      "effects": [
+        {
+          "type": "roll_speed",
+          "value": 1.069
+        }
+      ]
+    },
+    {
+      "id": "S3-C5",
+      "tier": 5,
+      "branch": "C",
+      "name": "ベット自動調整",
+      "cost": 80000,
+      "requires": [
+        "S3-C4"
+      ],
+      "effects": [
+        {
+          "type": "autotap",
+          "value": 2.0
+        }
+      ]
+    },
+    {
+      "id": "S3-C6",
+      "tier": 6,
+      "branch": "C",
+      "name": "胴元の代理",
+      "cost": 520000,
+      "requires": [
+        "S3-C5"
+      ],
+      "effects": [
+        {
+          "type": "roll_speed",
+          "value": 1.109
+        }
+      ]
+    },
+    {
+      "id": "S3-D1",
+      "tier": 1,
+      "branch": "D",
+      "name": "イカサマ入門",
+      "cost": 50,
+      "requires": [],
+      "effects": [
+        {
+          "type": "suspicion_decay_mult",
+          "value": 1.3
+        }
+      ]
+    },
+    {
+      "id": "S3-D2",
+      "tier": 2,
+      "branch": "D",
+      "name": "袖の中",
+      "cost": 300,
+      "requires": [
+        "S3-D1"
+      ],
+      "effects": [
+        {
+          "type": "suspicion_decay_mult",
+          "value": 1.5
+        }
+      ]
+    },
+    {
+      "id": "S3-D3",
+      "tier": 3,
+      "branch": "D",
+      "name": "重り入りの賽",
+      "cost": 1900,
+      "requires": [
+        "S3-D2"
+      ],
+      "effects": [
+        {
+          "type": "ev_add",
+          "value": 0.1
+        }
+      ]
+    },
+    {
+      "id": "S3-D4",
+      "tier": 4,
+      "branch": "D",
+      "name": "無心の法",
+      "cost": 12000,
+      "requires": [
+        "S3-D3"
+      ],
+      "effects": [
+        {
+          "type": "suspicion_decay_mult",
+          "value": 2.667
+        }
+      ]
+    },
+    {
+      "id": "S3-D5",
+      "tier": 5,
+      "branch": "D",
+      "name": "連勝の型",
+      "cost": 80000,
+      "requires": [
+        "S3-D4"
+      ],
+      "effects": [
+        {
+          "type": "scratch_mult",
+          "value": 1.194
+        }
+      ]
+    },
+    {
+      "id": "S3-D6",
+      "tier": 6,
+      "branch": "D",
+      "name": "完全支配",
+      "cost": 520000,
+      "requires": [
+        "S3-D5"
+      ],
+      "effects": [
+        {
+          "type": "ev_add",
+          "value": 0.15
+        }
+      ]
+    }
+  ],
+  "bribe": {
+    "id": "T7",
+    "name": "看守への賄賂",
+    "cost": 1000000,
+    "unlock_rule": "all_branches_tier4"
+  },
+  "inspection": {
+    "first_sec": 300,
+    "interval_min_sec": 240,
+    "interval_max_sec": 480,
+    "hide_success_rate": 0.6,
+    "hide_fail_loss": 0.1,
+    "hide_boost_mult": 1.5,
+    "hide_boost_sec": 90,
+    "bribe_cost": 0.05,
+    "bribe_boost_mult": 2.0,
+    "bribe_boost_sec": 90
+  }
+}
