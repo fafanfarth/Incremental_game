@@ -71,6 +71,25 @@ func _initialize() -> void:
 			quit(1)
 			return
 
+	# 購入がずれると、複利のステージでは軌道が恒久的にずれる。
+	# どの購入が何秒ずれたかを名指しできるよう、収益の推移より先に見る
+	var want_buys: Array = expected.get("purchase_times", [])
+	var got_buys: Array = sim.purchase_times
+	for i in range(mini(want_buys.size(), got_buys.size())):
+		var w_t := float(want_buys[i][0])
+		var g_t := float(got_buys[i][0])
+		var w_id := String(want_buys[i][1])
+		var g_id := String(got_buys[i][1])
+		if w_id != g_id or absf(g_t - w_t) > 0.05:
+			print("  GDScript の購入 %d〜%d 件目 %s" % [
+				maxi(0, i - 2) + 1, i + 1, str(got_buys.slice(maxi(0, i - 2), i + 1))])
+			print("  Python   の購入 %d〜%d 件目 %s" % [
+				maxi(0, i - 2) + 1, i + 1, str(want_buys.slice(maxi(0, i - 2), i + 1))])
+			push_error("%s : 購入 %d 件目がずれている  GDScript %s @%.2f秒 / Python %s @%.2f秒"
+				% [label, i + 1, g_id, g_t, w_id, w_t])
+			quit(1)
+			return
+
 	if sim.cleared_at < 0.0:
 		push_error("%s : 時間内にクリアできなかった" % label)
 		quit(1)
@@ -116,7 +135,7 @@ func _initialize() -> void:
 ## 食い違った前後を並べて出す。CI ログだけで原因を追えるようにするため
 func _dump(sim: Sim, want: Array, got: Array, at: int) -> void:
 	var from := maxi(0, at - 2)
-	var to := mini(want.size(), at + 3)
+	var to := mini(mini(want.size(), got.size()), at + 3)
 	print("--- 食い違いの前後 ---")
 	for i in range(from, to):
 		var mark := " <<<" if i == at else ""

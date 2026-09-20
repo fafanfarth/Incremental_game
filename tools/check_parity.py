@@ -48,6 +48,7 @@ def expectation(stage: str, seed: int, profile_key: str) -> dict:
         "snapshot_every": SNAPSHOT_EVERY,
         "checkpoints": [[h.t, h.lifetime] for h in s.history],
         "inspection_times": s.inspection_times[:8],
+        "purchase_times": [[t, i] for t, i in s.purchase_times],
     }
 
 

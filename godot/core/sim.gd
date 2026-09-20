@@ -39,6 +39,11 @@ var checkpoints: Array = []
 ## 抜き打ち検査が実際に発生した時刻。parity の診断に使う
 var inspection_times: Array = []
 
+## [経過秒, 購入したもの] の並び。parity の診断に使う。
+## 複利のステージでは購入が1ティアずれるだけで軌道が恒久的にずれるため、
+## ここを突き合わせないと「どの購入がずれたか」に辿り着けない
+var purchase_times: Array = []
+
 
 func _init(p_profile: SimProfile, p_data: Dictionary, p_core: StageCore, p_seed: int = 1) -> void:
 	profile = p_profile
@@ -203,8 +208,10 @@ func try_purchase() -> bool:
 	spent += best_cost
 	if best_kind == "repeat":
 		core.buy_repeat(self, best_item["id"])
+		purchase_times.append([t, "repeat:" + String(best_item["id"])])
 	else:
 		owned[best_item["id"]] = true
+		purchase_times.append([t, String(best_item["id"])])
 		_log.append("%s %s (%d)" % [best_item["id"], best_item["name"], int(best_cost)])
 	purchase_pause = profile.purchase_pause_sec
 	return true

@@ -37,6 +37,9 @@ class Profile:
     purchase_pause_sec: float = 2.5
     inspection_choice: str = "bribe"   # "hide" か "bribe"
     max_sec: float = 8 * 3600
+    # 実機（Godot）では False にして UI から操作を注入する。
+    # Python シミュレータは常に True。GDScript 側と対応を保つためだけに置いている
+    simulated: bool = True
 
 
 @dataclass
@@ -59,7 +62,11 @@ class State:
     boost_remaining: float = 0.0
     boost_mult_active: float = 1.0
     next_inspection: float = 0.0
-    owned: set = field(default_factory=set)
+    # GDScript の Dictionary（挿入順）と反復順を揃えるため set ではなく dict。
+    # 順序が違うと product() の乗算順が変わり、末尾ビットがずれる。
+    # 僅差の payback 比較が反転して購入順が変わり、複利のステージでは
+    # それが軌道の恒久的なずれになる（stage03 で実際に起きた）
+    owned: dict = field(default_factory=dict)
     repeats: dict = field(default_factory=dict)
     manual_income: float = 0.0
     auto_income: float = 0.0
@@ -78,6 +85,7 @@ class Sim:
         self.history: list[Snapshot] = []
         self.log: list[tuple[float, str]] = []
         self.inspection_times: list[float] = []
+        self.purchase_times: list[tuple[float, str]] = []
         self.cleared_at: float | None = None
         ins = self.d.get("inspection")
         self.s.next_inspection = ins["first_sec"] if ins else math.inf
@@ -179,11 +187,11 @@ class Sim:
         for sk in self.d["skills"]:
             if not self.skill_available(sk) or sk["cost"] > self.s.currency:
                 continue
-            self.s.owned.add(sk["id"])
+            self.s.owned[sk["id"]] = True
             try:
                 gain = self.core.estimated_income(self) - base
             finally:
-                self.s.owned.discard(sk["id"])
+                self.s.owned.pop(sk["id"], None)
             # 収入に直結しない枝も死に枝にしないため、最低限の評価値を置く
             if gain <= 0:
                 gain = sk["cost"] / 3600.0
@@ -199,8 +207,10 @@ class Sim:
         self.s.spent += cost
         if kind == "repeat":
             self.core.buy_repeat(self, item["id"])
+            self.purchase_times.append((self.t, "repeat:" + item["id"]))
         else:
-            self.s.owned.add(item["id"])
+            self.s.owned[item["id"]] = True
+            self.purchase_times.append((self.t, item["id"]))
             self.log.append((self.t, f"{item['id']} {item['name']} ({cost:,.0f})"))
         self.s.purchase_pause = self.p.purchase_pause_sec
         return True
