@@ -75,7 +75,11 @@ func _style() -> void:
 	left_rail.add_theme_stylebox_override("panel", Palette.panel(Palette.SURFACE))
 	right_panel.add_theme_stylebox_override("panel", Palette.panel(Palette.SURFACE))
 	$BottomBar.add_theme_stylebox_override("panel", Palette.panel(Palette.SURFACE_HI))
+	# カウンタは毎フレーム変わる。等幅数字にしないと桁が左右に踊る
+	currency_label.theme_type_variation = &"Counter"
 	currency_label.add_theme_color_override("font_color", Palette.GOLD)
+	goal_label.theme_type_variation = &"Small"
+	timer_label.theme_type_variation = &"Numeric"
 	goal_label.add_theme_color_override("font_color", Palette.TEXT_DIM)
 	timer_label.add_theme_color_override("font_color", Palette.TEXT_DIM)
 

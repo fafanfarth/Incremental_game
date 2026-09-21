@@ -83,6 +83,7 @@ func _build_right_panel() -> void:
 	var slot: VBoxContainer = _frame.right_slot
 
 	var heading := Label.new()
+	heading.theme_type_variation = &"Head"
 	heading.text = "子分"
 	heading.add_theme_color_override("font_color", Palette.TEXT_DIM)
 	slot.add_child(heading)
@@ -95,6 +96,7 @@ func _build_right_panel() -> void:
 
 		var title := Label.new()
 		var cost := Label.new()
+		cost.theme_type_variation = &"Numeric"
 		cost.add_theme_color_override("font_color", Palette.TEXT_DIM)
 		var buy := Button.new()
 		buy.text = "買う"

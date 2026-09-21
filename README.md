@@ -23,6 +23,7 @@
 | 10 | [課金・広告設計](docs/10-monetization.md) | 広告枠、IAP、売らないもの、収益目標 |
 | 11 | [Phase 0 実測結果](docs/11-phase0-findings.md) | シミュレータでの検証、見つかった設計の誤り、階梯の再調整 |
 | 12 | [技術設計（Godot 4 / Steam移植）](docs/12-godot-architecture.md) | エンジン選定、Steam版のために今決めること、CI |
+| 13 | [実機確認とフォント選定](docs/13-device-testing.md) | iOS ビルド手順、フォント候補、実機で見ること |
 
 実装:
 - [`godot/`](godot/README.md) — Godot 4 プロジェクト。iOS / Android 先行、Steam は後から

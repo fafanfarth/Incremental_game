@@ -87,6 +87,32 @@ func _initialize() -> void:
 		screen.queue_free()
 		await process_frame
 
+	# フォントの同梱と CJK 収録。ここが抜けると実機で日本語が全て豆腐になる
+	for face in Typography.FILES:
+		var path: String = Typography.FILES[face]
+		if not ResourceLoader.exists(path):
+			push_error("フォントが無い: %s" % path)
+			failed += 1
+			continue
+		var f: FontFile = load(path)
+		if f == null:
+			push_error("フォントが読めない: %s" % path)
+			failed += 1
+			continue
+		# 「賄」が出せなければ日本語 UI は成立しない
+		if not f.has_char(0x8CC4):
+			push_error("CJK が入っていない: %s" % path)
+			failed += 1
+			continue
+		print("フォント %s → 日本語を出せる" % Typography.LABELS[face])
+
+	var theme := Typography.build_theme()
+	if theme == null or theme.default_font == null:
+		push_error("テーマが組めない")
+		failed += 1
+	else:
+		print("テーマ → 既定フォントと等幅数字を設定できた")
+
 	# 表示規則（05章 5.8）
 	var cases := {
 		"8,240": Fmt.amount(8240.0),
